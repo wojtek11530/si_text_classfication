@@ -9,13 +9,18 @@ def get_multinomial_nb_model(features_data, category_labels):
     return clf
 
 
-def predict(model, test_features, test_categories_label):
+def predict(model, test_features, test_categories_label, plotting=True):
     model_name = type(model).__name__
     predicted_categories = model.predict(test_features)
-    report = classification_report(test_categories_label, predicted_categories)
 
     acc = accuracy_score(test_categories_label, predicted_categories)
     conf_mat = confusion_matrix(test_categories_label, predicted_categories)
+    if plotting:
+        plot_scoring(acc, conf_mat, model, model_name)
+    return acc
+
+
+def plot_scoring(acc, conf_mat, model, model_name):
     fig, ax = plt.subplots(figsize=(14, 9))
     sns.heatmap(conf_mat, annot=True, fmt='d',
                 xticklabels=model.classes_, yticklabels=model.classes_, cmap='Blues', cbar=None)
