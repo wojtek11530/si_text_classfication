@@ -1,5 +1,4 @@
 import numpy as np
-from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -31,13 +30,13 @@ def predict(model, test_features, test_categories_label, plotting=True):
 
 
 def plot_scoring_and_conf_matrix(acc, conf_mat, model, model_name):
-    fig, ax = plt.subplots(figsize=(14, 9))
+    plt.subplots(figsize=(14, 9))
     sns.heatmap(conf_mat, annot=True, fmt='d',
                 xticklabels=model.classes_, yticklabels=model.classes_, cmap='Blues', cbar=None)
     plt.xticks(
         rotation=45,
         ha='right'
-    );
+    )
     plt.ylabel('Actual', fontsize=18)
     plt.xlabel('Predicted', fontsize=18)
     plt.title(model_name + ', confusion matrix, accuracy = ' + f'{acc:.5}', fontsize=24)
@@ -45,13 +44,14 @@ def plot_scoring_and_conf_matrix(acc, conf_mat, model, model_name):
     plt.show()
 
 
-
 def perform_cv_for_given_feature_number(model, train_all_features, train_categories, n_feature_num, k=10):
     feature_selector = get_feature_selector(train_all_features, train_categories, n_feature_num)
     selected_features = select_features(train_all_features, feature_selector)
     scores = cross_val_score(model, selected_features, train_categories, cv=k, n_jobs=-1)
-    print(type(model).__name__ + " CV, feat num = " + str(n_feature_num) + ", acc.: %0.4f (+/- %0.4f)" % (scores.mean(), scores.std()))
+    print(type(model).__name__ + " CV, feat num = " + str(n_feature_num) + ", acc.: %0.4f (+/- %0.4f)" % (
+        scores.mean(), scores.std()))
     return scores
+
 
 def perform_cv_for_various_features_num(model, train_all_features, train_categories, features_nums):
     avg_cv_accuracies = []
