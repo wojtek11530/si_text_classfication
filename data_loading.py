@@ -2,6 +2,16 @@ import os
 import numpy as np
 
 
+def load_all_data():
+    train_texts, train_categories = load_train_data()
+    test_texts, test_categories = load_test_data()
+
+    texts = train_texts + test_texts
+    categories = np.concatenate((train_categories, test_categories))
+    print('Data loaded')
+    return texts, categories
+
+
 def load_train_data():
     directory_path = 'data'
     subdirectory_path = 'wiki_train_34_categories_data'
@@ -31,7 +41,8 @@ def load_data(path):
 
 
 def get_file_names_from_directory(directory_path):
-    file_names = [file_name for file_name in os.listdir(directory_path) if is_correct_txt_file(directory_path, file_name)]
+    file_names = [file_name for file_name in os.listdir(directory_path) if
+                  is_correct_txt_file(directory_path, file_name)]
     return file_names
 
 
@@ -52,5 +63,5 @@ def get_texts_from_files(path, file_names, i_max=None):
 
 
 def is_correct_txt_file(directory_path, file_name):
-    return os.path.isfile(os.path.join(directory_path, file_name)) and os.path.splitext(file_name)[1] == '.txt'\
+    return os.path.isfile(os.path.join(directory_path, file_name)) and os.path.splitext(file_name)[1] == '.txt' \
            and os.path.splitext(file_name)[0] != 'license'
